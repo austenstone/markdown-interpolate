@@ -55,9 +55,10 @@ My name is <!-- NAME -->John<!-- END NAME -->
 ### Read content of all variables
 Read all the variables from a file.
 ```js
-import { markdownInterpolateWriteFileRegex } from '../src/markdown';
+import { markdownInterpolateRead } from '../src/markdown';
 
-markdownInterpolateWriteFileRegex('README.md');
+const results = markdownInterpolateRead('TEST.md');
+console.log(results);
 ```
 
 The output will be a JSON array of objects describing each variable.
