@@ -89,11 +89,12 @@ jobs:
           value: "@${{ github.repository_owner }}/markdown-interpolate"
 
       - name: 😺 GitHub publish
+        continue-on-error: true
+        env:
+          OWNER: ${{ github.repository_owner }}
+          NPM_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
-          echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "@${OWNER}:registry=https://npm.pkg.github.com" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}" >> .npmrc
           cat .npmrc
           npm publish
-        env:
-          NPM_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        continue-on-error: true
