@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: "🔨 Build 🧪 Test 🧹 Lint"
+    name: 🔨 Build 🧪 Test 🧹 Lint
     runs-on: ubuntu-latest
 
     steps:
@@ -34,11 +34,11 @@ jobs:
       - name: 🧹 Lint Demo
         run: npm run lint
 
-      - name: 💾 Archive devicewise-angular artifacts
+      - name: 💾 Archive artifacts
         uses: actions/upload-artifact@v2
         with:
           name: dist
-          path: dist/devicewise-angular
+          path: dist/
 
   publish_npm:
     name: 🔴 NPM publish
@@ -51,7 +51,7 @@ jobs:
         with:
           node-version: "16"
 
-      - name: ⬇️ Download devicewise-angular artifacts
+      - name: ⬇️ Download artifacts
         uses: actions/download-artifact@v2
         with:
           name: dist
@@ -75,7 +75,7 @@ jobs:
         with:
           node-version: "16"
 
-      - name: ⬇️ Download devicewise-angular artifacts
+      - name: ⬇️ Download artifacts
         uses: actions/download-artifact@v2
         with:
           name: dist
@@ -85,11 +85,11 @@ jobs:
         with:
           file: package.json
           field: name
-          value: "@telit/devicewise-angular"
+          value: "@austenstone/markdown-interpolate"
 
       - name: 😺 GitHub publish
         run: |
-          echo "@telit:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "@austenstone:registry=https://npm.pkg.github.com" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}" >> .npmrc
           cat .npmrc
           npm publish
