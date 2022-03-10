@@ -1,5 +1,5 @@
 {
-  "name": "markdown-interpolate",
+  "name": "markdown-interpolation",
   "version": "1.1.0",
   "description": "Add an issue or pull request to a project",
   "main": "index.js",
@@ -21,7 +21,7 @@
   "readme": "README.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/austenstone/markdown-interpolate.git"
+    "url": "https://github.com/austenstone/markdown-interpolation.git"
   },
   "license": "MIT",
   "dependencies": {},

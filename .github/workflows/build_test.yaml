@@ -87,7 +87,7 @@ jobs:
         with:
           file: package.json
           field: name
-          value: "@${{ github.repository_owner }}/markdown-interpolate"
+          value: "@${{ github.repository_owner }}/markdown-interpolation"
 
       - name: 😺 GitHub publish
         continue-on-error: true
