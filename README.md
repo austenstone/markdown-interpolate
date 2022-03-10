@@ -1,6 +1,8 @@
 # Markdown Interpolation
 Find and replace the content between markdown comments.
 
+This is intended for use in Node.js because it has some file operation logic for convenience.
+
 ## Writing
 Let's say you have a file called `README.md` with this content.
 ```md
