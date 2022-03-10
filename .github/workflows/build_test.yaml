@@ -89,7 +89,6 @@ jobs:
           value: "@${{ github.repository_owner }}/markdown-interpolate"
 
       - name: 😺 GitHub publish
-        continue-on-error: true
         env:
           OWNER: ${{ github.repository_owner }}
           NPM_TOKEN: ${{secrets.GITHUB_TOKEN}}
