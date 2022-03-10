@@ -12,7 +12,7 @@ My name is Bob.
 You can make the name "Bob" dynamic. 
 
 Let's call our variable `NAME` by using the prefix `<!-- NAME -->` and suffix `<!-- END NAME -->`.
-```
+```md
 My name is <!-- NAME -->Bob<!-- END NAME -->
 ```
 
@@ -26,7 +26,7 @@ markdownInterpolateFileWrite('README.md', {
 });
 ```
 This will result in the following file.
-```
+```md
 My name is <!-- NAME -->John<!-- END NAME -->
 ```
 When rendered in markdown it will appear as follows.
