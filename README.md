@@ -1,8 +1,75 @@
-<!-- VALUE -->
-<!-- END VALUE -->
+# Markdown Interpolation
+Find and replace the content between markdown comments.
 
-<!-- VALUE --> 12332 <!-- END VALUE -->
+## Writing
+Let's say you have a file called `README.md` with this content.
+```md
+My name is Bob.
+```
 
+You can make the name "Bob" dynamic. Let's call our variable `NAME` by using the prefix `<!-- NAME -->` and suffix `<!-- END NAME -->`.
+```
+My name is <!-- NAME -->Bob<!-- END NAME -->
+```
 
-<!-- VALUE -->12345<!-- END VALUE -->
+Now write some javascript to replace the content `Bob` with `John`.
+```js
+import { markdownInterpolateFileWrite } from '../src/markdown';
 
+markdownInterpolateFileWrite('README.md', {
+    NAME: 'John'
+});
+```
+This will result in the following file.
+```
+My name is <!-- NAME -->John<!-- END NAME -->
+```
+When rendered in markdown it will appear as follows.
+
+My name is <!-- NAME -->John<!-- END NAME -->
+
+### Write by file name
+```js
+import { markdownInterpolateFileWrite } from '../src/markdown';
+
+markdownInterpolateFileWrite('README.md', {
+    NAME: 'John'
+});
+```
+
+### Write by regex match on file names
+```js
+import { markdownInterpolateWriteFileRegex } from '../src/markdown';
+
+markdownInterpolateWriteFileRegex(/.*\.md/i, {
+    NAME: 'John'
+});
+```
+
+## Reading
+You can read all the markdown variables back.
+
+Let's continue using the example from the previous section.
+```md
+My name is <!-- NAME -->John<!-- END NAME -->
+```
+Read all the variables from a file.
+```js
+import { markdownInterpolateWriteFileRegex } from '../src/markdown';
+
+markdownInterpolateWriteFileRegex('README.md');
+```
+The output will be a JSON array of objects describing each variable.
+```json
+[{
+    "key": "NAME",
+    "value": "John"
+}]
+```
+
+### Read content of all variables
+```js
+import { markdownInterpolateWriteFileRegex } from '../src/markdown';
+
+markdownInterpolateWriteFileRegex('README.md');
+```

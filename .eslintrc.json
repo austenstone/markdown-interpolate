@@ -12,7 +12,14 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "object-curly-spacing": ["error", "always"]
+        "object-curly-spacing": ["error", "always"],
+        "max-len": ["error", {
+            "code": 120,
+            "ignoreComments": true,
+            "ignoreRegExpLiterals": true,
+            "ignoreStrings": true,
+            "ignoreTemplateLiterals": true
+        }]
     },
     "ignorePatterns": ["dist/**", "jest.config.js", "**/node_modules/**"]
 }

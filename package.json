@@ -24,8 +24,7 @@
     "url": "https://github.com/austenstone/action-typescript.git"
   },
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^27.4.0",
     "@types/node": "^16.11.26",
