@@ -12,6 +12,7 @@ You can make the name "Bob" dynamic. Let's call our variable `NAME` by using the
 My name is <!-- NAME -->Bob<!-- END NAME -->
 ```
 
+### Write by file name
 Now write some javascript to replace the content `Bob` with `John`.
 ```js
 import { markdownInterpolateFileWrite } from '../src/markdown';
@@ -28,16 +29,10 @@ When rendered in markdown it will appear as follows.
 
 My name is <!-- NAME -->John<!-- END NAME -->
 
-### Write by file name
-```js
-import { markdownInterpolateFileWrite } from '../src/markdown';
-
-markdownInterpolateFileWrite('README.md', {
-    NAME: 'John'
-});
-```
-
 ### Write by regex match on file names
+You can use regular expressions to match multiple files in a single call.
+
+For example match all files that end with `.md`.
 ```js
 import { markdownInterpolateWriteFileRegex } from '../src/markdown';
 
@@ -53,23 +48,18 @@ Let's continue using the example from the previous section.
 ```md
 My name is <!-- NAME -->John<!-- END NAME -->
 ```
+### Read content of all variables
 Read all the variables from a file.
 ```js
 import { markdownInterpolateWriteFileRegex } from '../src/markdown';
 
 markdownInterpolateWriteFileRegex('README.md');
 ```
+
 The output will be a JSON array of objects describing each variable.
 ```json
 [{
     "key": "NAME",
     "value": "John"
 }]
-```
-
-### Read content of all variables
-```js
-import { markdownInterpolateWriteFileRegex } from '../src/markdown';
-
-markdownInterpolateWriteFileRegex('README.md');
 ```
