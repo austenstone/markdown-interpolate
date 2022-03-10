@@ -19,7 +19,8 @@
             "ignoreRegExpLiterals": true,
             "ignoreStrings": true,
             "ignoreTemplateLiterals": true
-        }]
+        }],
+        "linebreak-style": 0
     },
     "ignorePatterns": ["dist/**", "jest.config.js", "**/node_modules/**"]
 }
