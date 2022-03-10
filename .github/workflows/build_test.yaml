@@ -1,4 +1,4 @@
-name: Build & Test
+name: Build and Publish
 
 on:
   pull_request:
@@ -10,22 +10,89 @@ on:
 
 jobs:
   build:
-    name: Lint/Build/Test
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        node: [ '12', '14', '16' ]
+  name: 🔨 Build 🧪 Test 🧹 Lint
+    runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Node.js ${{ matrix.node }}
+
+      - name: 🟩 Setup Node.js 16.x
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node }}
-      - run: npm install
-      - run: npm run lint
-        continue-on-error: true
-      - run: npm run build
-      - run: npm test
+          node-version: "16"
+          cache: "npm"
+
+      - name: 🟢 Install node modules
+        run: npm ci
+
+      - name: 🔨 Build
+        run: npm run build
+
+      - name: 🧪 Test
+        run: npm run test
+
+      - name: 🧹 Lint Demo
+        run: npm run lint
+
+      - name: 💾 Archive devicewise-angular artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist/devicewise-angular
+
+  publish_npm:
+    name: 🔴 NPM publish
+    needs: ["build", "test"]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🟩 Setup Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: ⬇️ Download devicewise-angular artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: dist
+
+      - name: 🔴 NPM publish
+        run: |
+          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+          npm publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+        continue-on-error: true
+
+  publish_github:
+    name: 😺 GitHub publish
+    needs: ["build", "test"]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🟩 Setup Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: ⬇️ Download devicewise-angular artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: dist
+
+      - name: Update package.json name 📝
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: package.json
+          field: name
+          value: "@telit/devicewise-angular"
+
+      - name: 😺 GitHub publish
+        run: |
+          echo "@telit:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}" >> .npmrc
+          cat .npmrc
+          npm publish
+        env:
+          NPM_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        continue-on-error: true
