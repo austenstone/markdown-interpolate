@@ -57,11 +57,12 @@ jobs:
           name: dist
 
       - name: 🔴 NPM publish
+        continue-on-error: true
+        env:
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
         run: |
           npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
           npm publish
-        env:
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
 
   publish_github:
     name: 😺 GitHub publish
@@ -88,6 +89,7 @@ jobs:
           value: "@${{ github.repository_owner }}/markdown-interpolate"
 
       - name: 😺 GitHub publish
+        continue-on-error: true
         env:
           OWNER: ${{ github.repository_owner }}
           NPM_TOKEN: ${{secrets.GITHUB_TOKEN}}
