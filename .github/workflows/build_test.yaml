@@ -9,8 +9,8 @@ on:
       - "**.md"
 
 jobs:
-  name: 🔨 Build 🧪 Test 🧹 Lint
   build:
+    name: "🔨 Build 🧪 Test 🧹 Lint"
     runs-on: ubuntu-latest
 
     steps:
