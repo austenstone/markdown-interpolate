@@ -7,7 +7,9 @@ Let's say you have a file called `README.md` with this content.
 My name is Bob.
 ```
 
-You can make the name "Bob" dynamic. Let's call our variable `NAME` by using the prefix `<!-- NAME -->` and suffix `<!-- END NAME -->`.
+You can make the name "Bob" dynamic. 
+
+Let's call our variable `NAME` by using the prefix `<!-- NAME -->` and suffix `<!-- END NAME -->`.
 ```
 My name is <!-- NAME -->Bob<!-- END NAME -->
 ```
