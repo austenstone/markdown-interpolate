@@ -68,3 +68,4 @@ The output will be a JSON array of objects describing each variable.
     "value": "John"
 }]
 ```
+
