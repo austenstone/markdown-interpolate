@@ -37,8 +37,8 @@ jobs:
       - name: 💾 Archive artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: dist
-          path: dist/
+          name: lib
+          path: lib/
 
   publish_npm:
     name: 🔴 NPM publish
@@ -55,7 +55,7 @@ jobs:
       - name: ⬇️ Download artifacts
         uses: actions/download-artifact@v2
         with:
-          name: dist
+          name: lib
 
       - name: 🔴 NPM publish
         continue-on-error: true
@@ -80,7 +80,7 @@ jobs:
       - name: ⬇️ Download artifacts
         uses: actions/download-artifact@v2
         with:
-          name: dist
+          name: lib
 
       - name: Update package.json name 📝
         uses: jossef/action-set-json-field@v1
