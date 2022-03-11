@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import path from 'path';
 
 export const markdownInterpolateFileWrite = (fileName: string, values: { [key: string]: any }): void => {
+  if (!values) throw Error('Missing paramter \'values\' for markdownInterpolateFileWrite');
   let content = fs.readFileSync(fileName).toString();
   for (const [key, value] of Object.entries(values)) {
     const regex = new RegExp(`(?<=<!-- ?${key} ?-->)(.*?)(?=<!-- ?END ${key} ?-->)`, 'gs');
