@@ -40,7 +40,8 @@ const values = {
 };
 
 beforeAll(() => {
-  return writeFileSync('TEST.md', testReadMe);
+  writeFileSync('TEST.md', testReadMe);
+  writeFileSync('TEST2.md', testReadMe);
 });
 
 test('write', () => {
@@ -62,5 +63,18 @@ test('write/read', () => {
   const results = markdownInterpolateRead('TEST.md');
   for (const result of results) {
     expect(String(values[result.key]) === result.value).toBe(true);
+  }
+});
+
+test('write regex/read', () => {
+  const regex = new RegExp('.*.md', 'gi');
+  markdownInterpolateWriteFileRegex(regex, values);
+  const results = markdownInterpolateRead('TEST.md');
+  for (const result of results) {
+    expect(result.value).toBe(String(values[result.key]));
+  }
+  const results2 = markdownInterpolateRead('TEST2.md');
+  for (const result of results2) {
+    expect(result.value).toBe(String(values[result.key]));
   }
 });
