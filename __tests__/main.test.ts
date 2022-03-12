@@ -1,6 +1,6 @@
 import { test, beforeAll, expect } from '@jest/globals';
 import { writeFileSync } from 'fs';
-import { markdownInterpolateRead, markdownInterpolateFileWrite, markdownInterpolateWriteFileRegex } from '../src/markdown';
+import { mdFileRead, mdFileReadRegex, mdFileWrite, mdFileWriteRegex } from '../src/markdown';
 
 const testReadMe = `# Testing
 
@@ -45,12 +45,12 @@ beforeAll(() => {
 });
 
 test('write', () => {
-  markdownInterpolateFileWrite('TEST.md', values);
+  mdFileWrite('TEST.md', values);
 });
 
 test('write missing values', () => {
   try {
-    markdownInterpolateFileWrite('TEST.md', null as any);
+    mdFileWrite('TEST.md', null as any);
   } catch (err) {
     expect(String(err).includes('Missing paramter \'values\' for markdownInterpolateFileWrite')).toBeTruthy();
   }
@@ -58,25 +58,25 @@ test('write missing values', () => {
 
 test('write bad file path', () => {
   try {
-    markdownInterpolateFileWrite('TEST33.md', values);
+    mdFileWrite('TEST33.md', values);
   } catch (err) {
     expect(String(err).includes('ENOENT')).toBeTruthy();
   }
 });
 
 test('write regex', () => {
-  markdownInterpolateWriteFileRegex(/TEST.md/, values);
+  mdFileWriteRegex(/TEST.md/, values);
 });
 
 test('read', () => {
-  const results = markdownInterpolateRead('TEST.md');
+  const results = mdFileRead('TEST.md');
   expect(results).toBeTruthy();
   expect(results.length).toEqual(Object.keys(values).length);
 });
 
 test('write/read', () => {
-  markdownInterpolateFileWrite('TEST.md', values);
-  const results = markdownInterpolateRead('TEST.md');
+  mdFileWrite('TEST.md', values);
+  const results = mdFileRead('TEST.md');
   for (const result of results) {
     expect(String(values[result.key]) === result.value).toBe(true);
   }
@@ -84,12 +84,12 @@ test('write/read', () => {
 
 test('write regex/read', () => {
   const regex = new RegExp('.*.md', 'gi');
-  markdownInterpolateWriteFileRegex(regex, values);
-  const results = markdownInterpolateRead('TEST.md');
+  mdFileWriteRegex(regex, values);
+  const results = mdFileRead('TEST.md');
   for (const result of results) {
     expect(result.value).toBe(String(values[result.key]));
   }
-  const results2 = markdownInterpolateRead('TEST2.md');
+  const results2 = mdFileRead('TEST2.md');
   for (const result of results2) {
     expect(result.value).toBe(String(values[result.key]));
   }
@@ -99,8 +99,8 @@ test('write/read empty string', () => {
   const valuesEmpty = {
     VALUE1: '',
   };
-  markdownInterpolateFileWrite('TEST.md', valuesEmpty);
-  const results = markdownInterpolateRead('TEST.md');
+  mdFileWrite('TEST.md', valuesEmpty);
+  const results = mdFileRead('TEST.md');
   const resultsExists = results.filter((result) => Object.keys(valuesEmpty).includes(result.key));
   for (const result of resultsExists) {
     expect(result.value).toBe(String(valuesEmpty['VALUE1']));
@@ -113,10 +113,19 @@ test('write/read undefined and null', () => {
     VALUE1: undefined,
     VALUE2: null,
   };
-  markdownInterpolateFileWrite('TEST.md', valuesEmpty);
-  const results = markdownInterpolateRead('TEST.md');
+  mdFileWrite('TEST.md', valuesEmpty);
+  const results = mdFileRead('TEST.md');
   const resultsExists = results.filter((result) => Object.keys(valuesEmpty).includes(result.key));
   for (const result of resultsExists) {
     expect(result.value).toBe(String(valuesEmpty[result.key]));
+  }
+});
+
+test('write regex/read regex', () => {
+  const regex = /^(?!README).*.md/gi;
+  mdFileWriteRegex(regex, values);
+  const results = mdFileReadRegex(regex);
+  for (const result of results) {
+    expect(result.value).toBe(String(values[result.key]));
   }
 });

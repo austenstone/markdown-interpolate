@@ -1,10 +1,14 @@
-export declare const markdownInterpolateFileWrite: (fileName: string, values: {
+export declare const mdFileWrite: (fileName: string, values: {
     [key: string]: any;
 }) => void;
-export declare const markdownInterpolateWriteFileRegex: (regex: RegExp, values: {
+export declare const mdFileWriteRegex: (regex: RegExp, values: {
     [key: string]: any;
 }) => void;
-export declare const markdownInterpolateRead: (fileName: string) => {
+export declare const mdFileReadRegex: (regex: RegExp) => {
+    key: string;
+    value: string;
+}[];
+export declare const mdFileRead: (fileName: string) => {
     key: string;
     value: string;
 }[];

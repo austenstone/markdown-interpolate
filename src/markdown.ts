@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import path from 'path';
 
-export const markdownInterpolateFileWrite = (fileName: string, values: { [key: string]: any }): void => {
+export const mdFileWrite = (fileName: string, values: { [key: string]: any }): void => {
   if (!values) throw Error('Missing paramter \'values\' for markdownInterpolateFileWrite');
   let content = fs.readFileSync(fileName).toString();
   for (const [key, value] of Object.entries(values)) {
@@ -11,15 +11,24 @@ export const markdownInterpolateFileWrite = (fileName: string, values: { [key: s
   fs.writeFileSync(fileName, content);
 };
 
-export const markdownInterpolateWriteFileRegex = (regex: RegExp, values: { [key: string]: any }): void => {
-  const files = fs.readdirSync('./')
+const regexFiles = (regex: RegExp): string[] => {
+  return fs.readdirSync('./')
       .filter((file) => file.match(regex))
       .map((file) => path.resolve('./', file));
-
-  files.forEach((file) => markdownInterpolateFileWrite(file, values));
 };
 
-export const markdownInterpolateRead = (fileName: string): { key: string, value: string }[] => {
+export const mdFileWriteRegex = (regex: RegExp, values: { [key: string]: any }): void => {
+  const files = regexFiles(regex);
+  files.forEach((file) => mdFileWrite(file, values));
+};
+
+export const mdFileReadRegex = (regex: RegExp): { key: string, value: string }[] => {
+  const files = regexFiles(regex);
+  const results: { key: string, value: string }[] = [];
+  return files.reduce((results, file) => results.concat(mdFileRead(file)), results);
+};
+
+export const mdFileRead = (fileName: string): { key: string, value: string }[] => {
   const results: { key: string, value: string }[] = [];
   const content = fs.readFileSync(fileName).toString();
   const regex = new RegExp(`(<!-- ?\\w+ ?-->)(.*?)(<!-- ?END \\w+ ?-->)`, 'gs');
