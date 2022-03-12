@@ -1,6 +1,6 @@
 import { test, beforeAll, expect } from '@jest/globals';
 import { writeFileSync } from 'fs';
-import { mdFileRead, mdFileReadRegex, mdFileWrite, mdFileWriteRegex } from '../src/markdown';
+import { mdFileRead, mdFileReadRegex, mdIFileWrite, mdIRead, mdIWrite } from '../src/markdown';
 
 const testReadMe = `# Testing
 
@@ -44,28 +44,28 @@ beforeAll(() => {
   writeFileSync('TEST2.md', testReadMe);
 });
 
-test('write', () => {
-  mdFileWrite('TEST.md', values);
+test('file write', () => {
+  mdIFileWrite('TEST.md', values);
 });
 
-test('write missing values', () => {
+test('file write missing values', () => {
   try {
-    mdFileWrite('TEST.md', null as any);
+    mdIFileWrite('TEST.md', null as any);
   } catch (err) {
-    expect(String(err).includes('Missing paramter \'values\' for markdownInterpolateFileWrite')).toBeTruthy();
+    expect(String(err)).toContain(`Missing paramter 'values'`);
   }
 });
 
-test('write bad file path', () => {
+test('file write bad file path', () => {
   try {
-    mdFileWrite('TEST33.md', values);
+    mdIFileWrite('TEST33.md', values);
   } catch (err) {
     expect(String(err).includes('ENOENT')).toBeTruthy();
   }
 });
 
-test('write regex', () => {
-  mdFileWriteRegex(/TEST.md/, values);
+test('file write regex', () => {
+  mdIFileWrite(/TEST.md/, values);
 });
 
 test('read', () => {
@@ -74,17 +74,17 @@ test('read', () => {
   expect(results.length).toEqual(Object.keys(values).length);
 });
 
-test('write/read', () => {
-  mdFileWrite('TEST.md', values);
+test('file write/read', () => {
+  mdIFileWrite('TEST.md', values);
   const results = mdFileRead('TEST.md');
   for (const result of results) {
     expect(String(values[result.key]) === result.value).toBe(true);
   }
 });
 
-test('write regex/read', () => {
+test('file write regex/read', () => {
   const regex = new RegExp('.*.md', 'gi');
-  mdFileWriteRegex(regex, values);
+  mdIFileWrite(regex, values);
   const results = mdFileRead('TEST.md');
   for (const result of results) {
     expect(result.value).toBe(String(values[result.key]));
@@ -95,11 +95,11 @@ test('write regex/read', () => {
   }
 });
 
-test('write/read empty string', () => {
+test('file write/read empty string', () => {
   const valuesEmpty = {
     VALUE1: '',
   };
-  mdFileWrite('TEST.md', valuesEmpty);
+  mdIFileWrite('TEST.md', valuesEmpty);
   const results = mdFileRead('TEST.md');
   const resultsExists = results.filter((result) => Object.keys(valuesEmpty).includes(result.key));
   for (const result of resultsExists) {
@@ -108,12 +108,12 @@ test('write/read empty string', () => {
 });
 
 
-test('write/read undefined and null', () => {
+test('file write/read undefined and null', () => {
   const valuesEmpty = {
     VALUE1: undefined,
     VALUE2: null,
   };
-  mdFileWrite('TEST.md', valuesEmpty);
+  mdIFileWrite('TEST.md', valuesEmpty);
   const results = mdFileRead('TEST.md');
   const resultsExists = results.filter((result) => Object.keys(valuesEmpty).includes(result.key));
   for (const result of resultsExists) {
@@ -121,11 +121,34 @@ test('write/read undefined and null', () => {
   }
 });
 
-test('write regex/read regex', () => {
+test('file write regex/read regex', () => {
   const regex = /^(?!README).*.md/gi;
-  mdFileWriteRegex(regex, values);
+  mdIFileWrite(regex, values);
   const results = mdFileReadRegex(regex);
   for (const result of results) {
     expect(result.value).toBe(String(values[result.key]));
+  }
+});
+
+test('write', () => {
+  const result = mdIWrite(testReadMe, values);
+  for (const value of Object.values(values)) {
+    expect(result).toContain(String(value));
+  }
+});
+
+test('read', () => {
+  const result = mdIRead(testReadMe);
+  for (const value of Object.keys(values)) {
+    expect(Object.keys(result)).toContain(value);
+  }
+});
+
+test('write/read', () => {
+  const written = mdIWrite(testReadMe, values);
+  const result = mdIRead(written);
+  for (const [key, value] of Object.entries(values)) {
+    expect(Object.keys(result)).toContain(key);
+    expect(Object.values(result)).toContain(String(value));
   }
 });

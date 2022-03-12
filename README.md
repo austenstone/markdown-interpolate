@@ -19,9 +19,9 @@ My name is <!-- NAME -->Bob<!-- END NAME -->
 ### Write by file name
 Now write some javascript to replace the content `Bob` with `John`.
 ```js
-import { markdownInterpolateFileWrite } from 'markdown-interpolation';
+import { mdIFileWrite } from 'markdown-interpolation';
 
-markdownInterpolateFileWrite('README.md', {
+mdIFileWrite('README.md', {
     NAME: 'John'
 });
 ```
@@ -38,9 +38,9 @@ You can use regular expressions to match multiple files in a single call.
 
 For example match all files that end with `.md`.
 ```js
-import { markdownInterpolateWriteFileRegex } from 'markdown-interpolation';
+import { mdIFileWrite } from 'markdown-interpolation';
 
-markdownInterpolateWriteFileRegex(/.*\.md/i, {
+mdIFileWrite(/.*\.md/i, {
     NAME: 'John'
 });
 ```
@@ -55,9 +55,9 @@ My name is <!-- NAME -->John<!-- END NAME -->
 ### Read content of all variables
 Read all the variables from a file.
 ```js
-import { markdownInterpolateRead } from 'markdown-interpolation';
+import { mdIReadEntries } from 'markdown-interpolation';
 
-const results = markdownInterpolateRead('TEST.md');
+const results = mdIReadEntries('TEST.md');
 console.log(results);
 ```
 
