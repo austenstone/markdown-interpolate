@@ -68,3 +68,8 @@ The output will be a JSON array of objects describing each variable.
     "value": "John"
 }]
 ```
+## Regex
+This entire thing is powered by regex. Below is the expression.
+```
+/(?<=<!-- ?${key} ?-->)(.*?)(?=<!-- ?END ${key} ?-->)/gs
+```
